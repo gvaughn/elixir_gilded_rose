@@ -5,7 +5,7 @@ defmodule GildedRoseTest do
   import GildedRose
 
   def age(name, sell_in, quality) do
-    [item] = update_quality([%Item{name: name, sell_in: sell_in, quality: quality}])
+    item = update_quality(%Item{name: name, sell_in: sell_in, quality: quality})
     assert item.sell_in == sell_in - 1
     item
   end
