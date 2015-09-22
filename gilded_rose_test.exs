@@ -4,6 +4,7 @@ defmodule GildedRoseTest do
   use ExUnit.Case
   import GildedRose
 
+  @spec age(String.t, integer, non_neg_integer) :: %Item{}
   def age(name, sell_in, quality) do
     [item] = update_quality([%Item{name: name, sell_in: sell_in, quality: quality}])
     assert item.sell_in == sell_in - 1
