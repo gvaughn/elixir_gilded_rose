@@ -29,7 +29,7 @@ following changes:
   items as a parameter rather than a hard coded constant.
 
 You can read
-[the original kata article](http://www.iamnotmyself.com/2011/02/13/RefactorThisTheGildedRoseKata.aspx) for more details.
+[the original kata article](http://iamnotmyself.com/2011/02/13/refactor-this-the-gilded-rose-kata/) for more details.
 
 ## Git Branches
 
