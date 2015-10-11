@@ -1,175 +1,154 @@
-# These tests follow Jim Weirich's test cases in Ruby. His original is
-# available in the reference directory.
-defmodule GildedRoseTest do
+defmodule NormalItemTest do
+  use ModuleContext, item_name: "normal"
+
+  test "before sell date", context, do: assert_quality_delta(context, -1)
+
+  @tag sell_date: :on
+  test "on sell date", context, do: assert_quality_delta(context, -2)
+
+  @tag sell_date: :after
+  test "after sell date", context, do: assert_quality_delta(context, -2)
+
+  @tag quality: 0
+  test "of zero quality", context, do: assert_quality_delta(context, 0)
+end
+
+defmodule AgedBrieTest do
+  use ModuleContext, item_name: "Aged Brie"
+
+  @tag quality: 50
+  test "before sell date with max quality", context, do: assert context.item.quality == 50
+
+  defmodule AgedBrieTest.OnSellDate do
+    use ModuleContext, item_name: "Aged Brie", sell_date: :on
+
+    test "on sell date", context, do: assert_quality_delta(context, 2)
+
+    @tag quality: 49
+    test "near max quality", context, do: assert context.item.quality == 50
+
+    @tag quality: 50
+    test "with max quality", context, do: assert context.item.quality == 50
+  end
+
+  defmodule AgedBrieTest.AfterSellDate do
+    use ModuleContext, item_name: "Aged Brie", sell_date: :after
+
+    test "after sell date", context, do: assert_quality_delta(context, 2)
+
+    @tag quality: 50
+    test "with max quality", context, do: assert context.item.quality == 50
+  end
+end
+
+defmodule SulfurasTest do
+  use ModuleContext, item_name: "Sulfuras, Hand of Ragnaros", sell_in_assertion: false
+
+  def assert_unchanged_sell_in_and_quality(context) do
+    assert context.item.sell_in == context.original_item.sell_in
+    assert context.item.quality == context.original_item.quality
+  end
+
+  @tag sell_date: :before
+  test "before sell date", context, do: assert_unchanged_sell_in_and_quality(context)
+
+  @tag sell_date: :on
+  test "on sell date", context, do: assert_unchanged_sell_in_and_quality(context)
+
+  @tag sell_date: :after
+  test "after sell date", context, do: assert_unchanged_sell_in_and_quality(context)
+end
+
+defmodule BackstagePassTest do
+  use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert"
+
+  defmodule BackstagePassTest.LongBeforeSellDate do
+    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 11
+
+    test "long before sell date", context, do: assert_quality_delta(context, 1)
+
+    @tag quality: 50
+    test "at max quality", context, do: assert_quality_delta(context, 0)
+  end
+
+  defmodule BackstagePassTest.MediumCloseUpperBound do
+    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 10
+
+    test "medium close to sell date (upper bound)", context, do: assert_quality_delta(context, 2)
+
+    @tag quality: 50
+    test "at max quality", context, do: assert_quality_delta(context, 0)
+  end
+
+  defmodule BackstagePassTest.MediumCloseLowerBound do
+    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 6
+
+    test "medium close to sell date (lower bound)", context, do: assert_quality_delta(context, 2)
+
+    @tag quality: 50
+    test "at max quality", context, do: assert_quality_delta(context, 0)
+  end
+
+  defmodule BackstagePassTest.VeryCloseUpperBound do
+    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 5
+
+    test "very close to sell date (upper bound)", context, do: assert_quality_delta(context, 3)
+
+    @tag quality: 50
+    test "at max quality", context, do: assert_quality_delta(context, 0)
+  end
+
+  defmodule BackstagePassTest.VeryCloseLowerBound do
+    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 1
+
+    test "very close to sell date (lower bound)", context, do: assert_quality_delta(context, 3)
+
+    @tag quality: 50
+    test "at max quality", context, do: assert_quality_delta(context, 0)
+  end
+
+  @tag sell_date: :on
+  test "on sell date", context, do: assert context.item.quality == 0
+
+  @tag sell_date: :after
+  test "after sell date", context, do: assert context.item.quality == 0
+end
+
+defmodule ConjuredItemTest do
+
+  defmodule ConjuredItemTest.BeforeSellDate do
+    use ModuleContext, item_name: "Conjured Mana Cake", sell_date: :before
+
+    test "before sell date", context, do: assert_quality_delta(context, -2)
+
+    @tag quality: 0
+    test "at zero quality", context, do: assert context.item.quality == 0
+  end
+
+  defmodule ConjuredItemTest.OnSellDate do
+    use ModuleContext, item_name: "Conjured Mana Cake", sell_date: :on
+
+    test "on sell date", context, do: assert_quality_delta(context, -4)
+
+    @tag quality: 0
+    test "at zero quality", context, do: assert context.item.quality == 0
+  end
+
+  defmodule ConjuredItemTest.AfterSellDate do
+    use ModuleContext, item_name: "Conjured Mana Cake", sell_date: :after
+
+    test "after sell date", context, do: assert_quality_delta(context, -4)
+
+    @tag quality: 0
+    test "at zero quality", context, do: assert context.item.quality == 0
+  end
+end
+
+defmodule MultipleItemTest do
   use ExUnit.Case
-  import GildedRose
-
-  def age(name, sell_in, quality) do
-    item = update_quality(%Item{name: name, sell_in: sell_in, quality: quality})
-    assert item.sell_in == sell_in - 1
-    item
-  end
-
-  test "normal item before sell date" do
-    item = age("normal", 5, 10)
-    assert item.quality == 9
-  end
-
-  test "normal item on sell date" do
-    item = age("normal", 0, 10)
-    assert item.quality == 8
-  end
-
-  test "normal item after sell date" do
-    item = age("normal", -10, 10)
-    assert item.quality == 8
-  end
-
-  test "normal item of zero quality" do
-    item = age("normal", 5, 0)
-    assert item.quality == 0
-  end
-
-  test "aged brie before sell date with max quality" do
-    item = age("Aged Brie", 5, 50)
-    assert item.quality == 50
-  end
-
-  test "aged brie on sell date" do
-    item = age("Aged Brie", 0, 10)
-    assert item.quality == 12
-  end
-
-  test "aged brie on sell date near max quality" do
-    item = age("Aged Brie", 0, 49)
-    assert item.quality == 50
-  end
-
-  test "aged brie on sell date with max quality" do
-    item = age("Aged Brie", 0, 50)
-    assert item.quality == 50
-  end
-
-  test "aged brie after sell date" do
-    item = age("Aged Brie", -10, 10)
-    assert item.quality == 12
-  end
-
-  test "aged brie after sell date with max quality" do
-    item = age("Aged Brie", -10, 50)
-    assert item.quality == 50
-  end
-
-  test "Sulfuras before sell date" do
-    [item] = update_quality([%Item{name: "Sulfuras, Hand of Ragnaros", sell_in: 5, quality: 80}])
-    assert item.sell_in == 5
-    assert item.quality == 80
-  end
-
-  test "Sulfuras on sell date" do
-    [item] = update_quality([%Item{name: "Sulfuras, Hand of Ragnaros", sell_in: 0, quality: 80}])
-    assert item.sell_in == 0
-    assert item.quality == 80
-  end
-
-  test "Sulfuras after sell date" do
-    [item] = update_quality([%Item{name: "Sulfuras, Hand of Ragnaros", sell_in: -10, quality: 80}])
-    assert item.sell_in == -10
-    assert item.quality == 80
-  end
-
-  test "Backstage pass long before sell date" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 11, 10)
-    assert item.quality == 11
-  end
-
-  test "Backstage pass long before sell date at max quality" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 11, 50)
-    assert item.quality == 50
-  end
-
-  test "Backstage pass medium close to sell date (upper boun)" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 10, 10)
-    assert item.quality == 12
-  end
-
-  test "Backstage pass medium close to sell date (upper bound) at max quality" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 10, 50)
-    assert item.quality == 50
-  end
-
-  test "Backstage pass medium close to sell date (lower bound)" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 6, 10)
-    assert item.quality == 12
-  end
-
-  test "Backstage pass medium close to sell date (lower bound) at max quality" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 6, 50)
-    assert item.quality == 50
-  end
-
-  test "Backstage pass very close to sell date (upper bound)" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 5, 10)
-    assert item.quality == 13
-  end
-
-  test "Backstage pass very close to sell date (upper bound) at max quality" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 5, 50)
-    assert item.quality == 50
-  end
-
-  test "Backstage pass very close to sell date (lower bound)" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 1, 10)
-    assert item.quality == 13
-  end
-
-  test "Backstage pass very close to sell date (lower bound) at max quality" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 1, 50)
-    assert item.quality == 50
-  end
-
-  test "Backstage pass on sell date" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", 0, 10)
-    assert item.quality == 0
-  end
-
-  test "Backstage pass after sell date" do
-    item = age("Backstage passes to a TAFKAL80ETC concert", -10, 10)
-    assert item.quality == 0
-  end
-
-  test "conjured item before sell date" do
-    item = age("Conjured Mana Cake", 5, 10)
-    assert item.quality == 8
-  end
-
-  test "conjured item before sell date at zero quality" do
-    item = age("Conjured Mana Cake", 5, 0)
-    assert item.quality == 0
-  end
-
-  test "conjured item on sell date" do
-    item = age("Conjured Mana Cake", 0, 10)
-    assert item.quality == 6
-  end
-
-  test "conjured item on sell date at zero quality" do
-    item = age("Conjured Mana Cake", 0, 0)
-    assert item.quality == 0
-  end
-
-  test "conjured item after sell date" do
-    item = age("Conjured Mana Cake", -10, 10)
-    assert item.quality == 6
-  end
-
-  test "conjured item after sell date at zero quality" do
-    item = age("Conjured Mana Cake", -10, 0)
-    assert item.quality == 0
-  end
 
   test "with multiple items" do
-    [normal, brie] = update_quality([
+    [normal, brie] = GildedRose.update_quality([
       %Item{name: "Normal Item", sell_in: 5, quality: 10},
       %Item{name: "Aged Brie",   sell_in: 3, quality: 10}
     ])
@@ -181,4 +160,3 @@ defmodule GildedRoseTest do
     assert brie.quality == 11
   end
 end
-
