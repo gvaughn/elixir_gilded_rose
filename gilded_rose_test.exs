@@ -1,5 +1,6 @@
 defmodule NormalItemTest do
-  use ModuleContext, item_name: "normal"
+  use ModuleContext
+  @moduletag item_name: "normal"
 
   test "before sell date", context, do: assert_quality_delta(context, -1)
 
@@ -14,35 +15,35 @@ defmodule NormalItemTest do
 end
 
 defmodule AgedBrieTest do
-  use ModuleContext, item_name: "Aged Brie"
+  use ModuleContext
+  @moduletag item_name: "Aged Brie"
 
+  @tag sell_date: :before
   @tag quality: 50
   test "before sell date with max quality", context, do: assert context.item.quality == 50
 
-  defmodule AgedBrieTest.OnSellDate do
-    use ModuleContext, item_name: "Aged Brie", sell_date: :on
+  @tag sell_date: :on
+  @tag quality: 10
+  test "on sell date", context, do: assert_quality_delta(context, 2)
 
-    test "on sell date", context, do: assert_quality_delta(context, 2)
+  @tag quality: 49
+  test "on sell date near max quality", context, do: assert context.item.quality == 50
 
-    @tag quality: 49
-    test "near max quality", context, do: assert context.item.quality == 50
+  @tag quality: 50
+  test "on sell date with max quality", context, do: assert context.item.quality == 50
 
-    @tag quality: 50
-    test "with max quality", context, do: assert context.item.quality == 50
-  end
+  @tag sell_date: :after
+  @tag quality: 10
+  test "after sell date", context, do: assert_quality_delta(context, 2)
 
-  defmodule AgedBrieTest.AfterSellDate do
-    use ModuleContext, item_name: "Aged Brie", sell_date: :after
-
-    test "after sell date", context, do: assert_quality_delta(context, 2)
-
-    @tag quality: 50
-    test "with max quality", context, do: assert context.item.quality == 50
-  end
+  @tag quality: 50
+  test "after sell date with max quality", context, do: assert context.item.quality == 50
 end
 
 defmodule SulfurasTest do
-  use ModuleContext, item_name: "Sulfuras, Hand of Ragnaros", sell_in_assertion: false
+  use ModuleContext
+  @moduletag item_name: "Sulfuras, Hand of Ragnaros"
+  @moduletag sell_in_assertion: false
 
   def assert_unchanged_sell_in_and_quality(context) do
     assert context.item.sell_in == context.original_item.sell_in
@@ -60,52 +61,43 @@ defmodule SulfurasTest do
 end
 
 defmodule BackstagePassTest do
-  use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert"
+  use ModuleContext
+  @moduletag item_name: "Backstage passes to a TAFKAL80ETC concert"
 
-  defmodule BackstagePassTest.LongBeforeSellDate do
-    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 11
+  @tag sell_date: 11
+  @tag quality: 10
+  test "long before sell date", context, do: assert_quality_delta(context, 1)
 
-    test "long before sell date", context, do: assert_quality_delta(context, 1)
+  @tag quality: 50
+  test "long before sell date at max quality", context, do: assert_quality_delta(context, 0)
 
-    @tag quality: 50
-    test "at max quality", context, do: assert_quality_delta(context, 0)
-  end
+  @tag sell_date: 10
+  @tag quality: 10
+  test "medium close to sell date (upper bound)", context, do: assert_quality_delta(context, 2)
 
-  defmodule BackstagePassTest.MediumCloseUpperBound do
-    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 10
+  @tag quality: 50
+  test "medium close to sell date (upper bound) at max quality", context, do: assert_quality_delta(context, 0)
 
-    test "medium close to sell date (upper bound)", context, do: assert_quality_delta(context, 2)
+  @tag sell_date: 6
+  @tag quality: 10
+  test "medium close to sell date (lower bound)", context, do: assert_quality_delta(context, 2)
 
-    @tag quality: 50
-    test "at max quality", context, do: assert_quality_delta(context, 0)
-  end
+  @tag quality: 50
+  test "medium close to sell date (lower bound) at max quality", context, do: assert_quality_delta(context, 0)
 
-  defmodule BackstagePassTest.MediumCloseLowerBound do
-    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 6
+  @tag sell_date: 5
+  @tag quality: 10
+  test "very close to sell date (upper bound)", context, do: assert_quality_delta(context, 3)
 
-    test "medium close to sell date (lower bound)", context, do: assert_quality_delta(context, 2)
+  @tag quality: 50
+  test "very close to sell date (upper bound) at max quality", context, do: assert_quality_delta(context, 0)
 
-    @tag quality: 50
-    test "at max quality", context, do: assert_quality_delta(context, 0)
-  end
+  @tag sell_date: 1
+  @tag quality: 10
+  test "very close to sell date (lower bound)", context, do: assert_quality_delta(context, 3)
 
-  defmodule BackstagePassTest.VeryCloseUpperBound do
-    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 5
-
-    test "very close to sell date (upper bound)", context, do: assert_quality_delta(context, 3)
-
-    @tag quality: 50
-    test "at max quality", context, do: assert_quality_delta(context, 0)
-  end
-
-  defmodule BackstagePassTest.VeryCloseLowerBound do
-    use ModuleContext, item_name: "Backstage passes to a TAFKAL80ETC concert", sell_date: 1
-
-    test "very close to sell date (lower bound)", context, do: assert_quality_delta(context, 3)
-
-    @tag quality: 50
-    test "at max quality", context, do: assert_quality_delta(context, 0)
-  end
+  @tag quality: 50
+  test "very close to sell date (lower bound) at max quality", context, do: assert_quality_delta(context, 0)
 
   @tag sell_date: :on
   test "on sell date", context, do: assert context.item.quality == 0
@@ -115,33 +107,29 @@ defmodule BackstagePassTest do
 end
 
 defmodule ConjuredItemTest do
+  use ModuleContext
+  @moduletag item_name: "Conjured Mana Cake"
 
-  defmodule ConjuredItemTest.BeforeSellDate do
-    use ModuleContext, item_name: "Conjured Mana Cake", sell_date: :before
+  @tag sell_date: :before
+  @tag quality: 10
+  test "before sell date", context, do: assert_quality_delta(context, -2)
 
-    test "before sell date", context, do: assert_quality_delta(context, -2)
+  @tag quality: 0
+  test "before sell date at zero quality", context, do: assert context.item.quality == 0
 
-    @tag quality: 0
-    test "at zero quality", context, do: assert context.item.quality == 0
-  end
+  @tag sell_date: :on
+  @tag quality: 10
+  test "on sell date", context, do: assert_quality_delta(context, -4)
 
-  defmodule ConjuredItemTest.OnSellDate do
-    use ModuleContext, item_name: "Conjured Mana Cake", sell_date: :on
+  @tag quality: 0
+  test "on sell date at zero quality", context, do: assert context.item.quality == 0
 
-    test "on sell date", context, do: assert_quality_delta(context, -4)
+  @tag sell_date: :after
+  @tag quality: 10
+  test "after sell date", context, do: assert_quality_delta(context, -4)
 
-    @tag quality: 0
-    test "at zero quality", context, do: assert context.item.quality == 0
-  end
-
-  defmodule ConjuredItemTest.AfterSellDate do
-    use ModuleContext, item_name: "Conjured Mana Cake", sell_date: :after
-
-    test "after sell date", context, do: assert_quality_delta(context, -4)
-
-    @tag quality: 0
-    test "at zero quality", context, do: assert context.item.quality == 0
-  end
+  @tag quality: 0
+  test "after sell date at zero quality", context, do: assert context.item.quality == 0
 end
 
 defmodule MultipleItemTest do

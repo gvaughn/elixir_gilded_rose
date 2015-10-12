@@ -3,15 +3,12 @@ ExUnit.start()
 defmodule ModuleContext do
   use ExUnit.Case
 
-  defmacro __using__(module_ctx) do
+  defmacro __using__(_opts) do
     quote do
       use ExUnit.Case
       import ModuleContext
 
-      setup test_ctx do
-        merged_context = %{} |> Dict.merge(unquote(module_ctx)) |> Dict.merge(test_ctx)
-        master_setup(merged_context)
-      end
+      setup context, do: master_setup(context)
     end
   end
 
