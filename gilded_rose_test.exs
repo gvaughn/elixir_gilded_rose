@@ -1,5 +1,5 @@
 defmodule NormalItemTest do
-  use ModuleContext
+  use GildedRoseContext
   @moduletag item_name: "normal"
 
   test "before sell date", context, do: assert_quality_delta(context, -1)
@@ -15,7 +15,7 @@ defmodule NormalItemTest do
 end
 
 defmodule AgedBrieTest do
-  use ModuleContext
+  use GildedRoseContext
   @moduletag item_name: "Aged Brie"
 
   @tag sell_date: :before
@@ -41,7 +41,7 @@ defmodule AgedBrieTest do
 end
 
 defmodule SulfurasTest do
-  use ModuleContext
+  use GildedRoseContext
   @moduletag item_name: "Sulfuras, Hand of Ragnaros"
   @moduletag sell_in_assertion: false
 
@@ -61,7 +61,7 @@ defmodule SulfurasTest do
 end
 
 defmodule BackstagePassTest do
-  use ModuleContext
+  use GildedRoseContext
   @moduletag item_name: "Backstage passes to a TAFKAL80ETC concert"
 
   @tag sell_date: 11
@@ -107,7 +107,7 @@ defmodule BackstagePassTest do
 end
 
 defmodule ConjuredItemTest do
-  use ModuleContext
+  use GildedRoseContext
   @moduletag item_name: "Conjured Mana Cake"
 
   @tag sell_date: :before

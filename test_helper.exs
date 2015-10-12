@@ -1,12 +1,13 @@
 ExUnit.start()
 
-defmodule ModuleContext do
+defmodule GildedRoseContext do
   use ExUnit.Case
 
   defmacro __using__(_opts) do
+    ctx_module = __MODULE__
     quote do
       use ExUnit.Case
-      import ModuleContext
+      import unquote(ctx_module)
 
       setup context, do: master_setup(context)
     end
