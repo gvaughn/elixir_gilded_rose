@@ -31,11 +31,16 @@ defmodule GildedRose do
     |> Map.update!(:sell_in, &(&1 - 1))
   end
 
+  def update_sulfuras(item) do
+    item
+  end
+
   def update_quality(items) do
     Enum.map(items, fn(item) ->
       case item.name do
         "normal" -> update_normal_item(item)
         "Aged Brie" -> update_aged_brie(item)
+        "Sulfuras, Hand of Ragnaros" -> update_sulfuras(item)
         _ ->
           if item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" do
             if item.quality > 0 do
