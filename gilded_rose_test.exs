@@ -138,7 +138,6 @@ defmodule GildedRoseTest do
     assert item.quality == 0
   end
 
-  @tag :skip
   test "conjured item before sell date" do
     item = age("Conjured Mana Cake", 5, 10)
     assert item.quality == 8
@@ -149,7 +148,6 @@ defmodule GildedRoseTest do
     assert item.quality == 0
   end
 
-  @tag :skip
   test "conjured item on sell date" do
     item = age("Conjured Mana Cake", 0, 10)
     assert item.quality == 6
@@ -160,7 +158,6 @@ defmodule GildedRoseTest do
     assert item.quality == 0
   end
 
-  @tag :skip
   test "conjured item after sell date" do
     item = age("Conjured Mana Cake", -10, 10)
     assert item.quality == 6

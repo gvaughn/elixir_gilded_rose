@@ -49,12 +49,25 @@ defmodule GildedRose do
     |> Map.update!(:sell_in, &(&1 - 1))
   end
 
+  def update_conjured_item(item) do
+    item
+    |> Map.update!(:quality, fn(q) ->
+      cond do
+        item.sell_in <= 0 -> q - 4
+        true -> q - 2
+      end
+    end)
+    |> Map.update!(:quality, &(Enum.max([&1, 0])))
+    |> Map.update!(:sell_in, &(&1 - 1))
+  end
+
   def update_quality(items) do
     Enum.map(items, fn(item) ->
       case item.name do
         "Aged Brie" -> update_aged_brie(item)
         "Sulfuras, Hand of Ragnaros" -> update_sulfuras(item)
         "Backstage passes to a TAFKAL80ETC concert" -> update_backstage_passes(item)
+        "Conjured Mana Cake" -> update_conjured_item(item)
         _ -> update_normal_item(item)
       end
     end)
