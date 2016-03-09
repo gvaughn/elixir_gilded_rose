@@ -23,11 +23,10 @@ defmodule GildedRose do
     item
     |> Map.update!(:quality, fn(q) ->
       cond do
-        item.sell_in <= 0 -> q - 2
-        true -> q - 1
+        item.sell_in <= 0 -> decrease_by(q, 2)
+        true -> decrease_by(q, 1)
       end
     end)
-    |> Map.update!(:quality, &(Enum.max([&1, 0])))
     |> Map.update!(:sell_in, &(&1 - 1))
   end
 
@@ -35,11 +34,10 @@ defmodule GildedRose do
     item
     |> Map.update!(:quality, fn(q) ->
       cond do
-        item.sell_in <= 0 -> q + 2
-        true -> q + 1
+        item.sell_in <= 0 -> increase_by(q, 2)
+        true -> increase_by(q, 1)
       end
     end)
-    |> Map.update!(:quality, &(Enum.min([&1, 50])))
     |> Map.update!(:sell_in, &(&1 - 1))
   end
 
@@ -52,12 +50,11 @@ defmodule GildedRose do
     |> Map.update!(:quality, fn(q) ->
       cond do
         item.sell_in <= 0 -> 0
-        item.sell_in <= 5 -> q + 3
-        item.sell_in <= 10 -> q + 2
-        true -> q + 1
+        item.sell_in <= 5 -> increase_by(q, 3)
+        item.sell_in <= 10 -> increase_by(q, 2)
+        true -> increase_by(q, 1)
       end
     end)
-    |> Map.update!(:quality, &(Enum.min([&1, 50])))
     |> Map.update!(:sell_in, &(&1 - 1))
   end
 
@@ -65,11 +62,18 @@ defmodule GildedRose do
     item
     |> Map.update!(:quality, fn(q) ->
       cond do
-        item.sell_in <= 0 -> q - 4
-        true -> q - 2
+        item.sell_in <= 0 -> decrease_by(q, 4)
+        true -> decrease_by(q, 2)
       end
     end)
-    |> Map.update!(:quality, &(Enum.max([&1, 0])))
     |> Map.update!(:sell_in, &(&1 - 1))
+  end
+
+  defp decrease_by(q, change) do
+    q - change |> max(0)
+  end
+
+  defp increase_by(q, change) do
+    q + change |> min(50)
   end
 end
