@@ -7,7 +7,7 @@ defmodule GildedRose do
   # You can find the original code in the reference directory.
   # Your job is to now make it beautiful.
 
-  def update_normal_item(item) do
+  defp update_normal_item(item) do
     item
     |> Map.update!(:quality, fn(q) ->
       cond do
@@ -19,7 +19,7 @@ defmodule GildedRose do
     |> Map.update!(:sell_in, &(&1 - 1))
   end
 
-  def update_aged_brie(item) do
+  defp update_aged_brie(item) do
     item
     |> Map.update!(:quality, fn(q) ->
       cond do
@@ -31,11 +31,11 @@ defmodule GildedRose do
     |> Map.update!(:sell_in, &(&1 - 1))
   end
 
-  def update_sulfuras(item) do
+  defp update_sulfuras(item) do
     item
   end
 
-  def update_backstage_passes(item) do
+  defp update_backstage_passes(item) do
     item
     |> Map.update!(:quality, fn(q) ->
       cond do
@@ -49,7 +49,7 @@ defmodule GildedRose do
     |> Map.update!(:sell_in, &(&1 - 1))
   end
 
-  def update_conjured_item(item) do
+  defp update_conjured_item(item) do
     item
     |> Map.update!(:quality, fn(q) ->
       cond do
