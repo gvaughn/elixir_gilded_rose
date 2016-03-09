@@ -19,10 +19,23 @@ defmodule GildedRose do
     |> Map.update!(:sell_in, &(&1 - 1))
   end
 
+  def update_aged_brie(item) do
+    item
+    |> Map.update!(:quality, fn(q) ->
+      cond do
+        item.sell_in <= 0 -> q + 2
+        true -> q + 1
+      end
+    end)
+    |> Map.update!(:quality, &(Enum.min([&1, 50])))
+    |> Map.update!(:sell_in, &(&1 - 1))
+  end
+
   def update_quality(items) do
     Enum.map(items, fn(item) ->
       case item.name do
         "normal" -> update_normal_item(item)
+        "Aged Brie" -> update_aged_brie(item)
         _ ->
           if item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" do
             if item.quality > 0 do
