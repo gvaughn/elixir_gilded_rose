@@ -7,9 +7,22 @@ defmodule GildedRose do
   # You can find the original code in the reference directory.
   # Your job is to now make it beautiful.
 
+  def update_normal_item(item) do
+    item
+    |> Map.update!(:quality, fn(q) ->
+      cond do
+        item.sell_in <= 0 -> q - 2
+        true -> q - 1
+      end
+    end)
+    |> Map.update!(:quality, &(Enum.max([&1, 0])))
+    |> Map.update!(:sell_in, &(&1 - 1))
+  end
+
   def update_quality(items) do
     Enum.map(items, fn(item) ->
       case item.name do
+        "normal" -> update_normal_item(item)
         _ ->
           if item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" do
             if item.quality > 0 do
