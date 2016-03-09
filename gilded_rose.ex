@@ -1,12 +1,6 @@
 defmodule Item, do: defstruct name: nil, sell_in: nil, quality: nil
 
 defmodule GildedRose do
-  # DO NOT WRITE ELIXIR LIKE THIS. PLEASE!
-  # This is as direct a port of the C# code as I could achieve.
-  # I experienced actual physical pain in doing so.
-  # You can find the original code in the reference directory.
-  # Your job is to now make it beautiful.
-
   def update_quality(items) do
     Enum.map(items, fn(item) ->
       case item.name do
