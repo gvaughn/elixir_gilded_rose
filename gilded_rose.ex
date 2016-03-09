@@ -40,8 +40,8 @@ defmodule GildedRose do
     |> Map.update!(:quality, fn(q) ->
       cond do
         item.sell_in <= 0 -> 0
-        item.sell_in < 6 -> q + 3
-        item.sell_in < 11 -> q + 2
+        item.sell_in <= 5 -> q + 3
+        item.sell_in <= 10 -> q + 2
         true -> q + 1
       end
     end)
