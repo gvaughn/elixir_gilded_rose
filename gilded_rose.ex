@@ -27,7 +27,7 @@ defmodule GildedRose do
         true -> decrease_by(q, 1)
       end
     end)
-    |> Map.update!(:sell_in, &(&1 - 1))
+    |> decrease_sell_in
   end
 
   defp update_aged_brie(item) do
@@ -38,7 +38,7 @@ defmodule GildedRose do
         true -> increase_by(q, 1)
       end
     end)
-    |> Map.update!(:sell_in, &(&1 - 1))
+    |> decrease_sell_in
   end
 
   defp update_sulfuras(item) do
@@ -55,7 +55,7 @@ defmodule GildedRose do
         true -> increase_by(q, 1)
       end
     end)
-    |> Map.update!(:sell_in, &(&1 - 1))
+    |> decrease_sell_in
   end
 
   defp update_conjured_item(item) do
@@ -66,7 +66,7 @@ defmodule GildedRose do
         true -> decrease_by(q, 2)
       end
     end)
-    |> Map.update!(:sell_in, &(&1 - 1))
+    |> decrease_sell_in
   end
 
   defp decrease_by(q, change) do
@@ -75,5 +75,9 @@ defmodule GildedRose do
 
   defp increase_by(q, change) do
     q + change |> min(50)
+  end
+
+  defp decrease_sell_in(item) do
+    Map.update!(item, :sell_in, &(&1 - 1))
   end
 end
