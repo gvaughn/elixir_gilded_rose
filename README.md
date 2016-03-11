@@ -33,9 +33,15 @@ You can read
 
 ## Git Branches
 
-* The 'master' branch contains the starting point for the kata.
+* The [master](https://github.com/gvaughn/elixir_gilded_rose/tree/master) branch contains the starting point for the kata.
 
-* The 'gvaughn' branch is my first solution for this kata.
+* The [gvaughn](https://github.com/gvaughn/elixir_gilded_rose/tree/gvaughn) branch is my first solution for this kata.
+
+* The [gvaughn2](https://github.com/gvaughn/elixir_gilded_rose/tree/gvaughn2) is my 2nd attempt, which I like better.
+
+* The [eksperimental](https://github.com/gvaughn/elixir_gilded_rose/tree/eksperimental) branch is our first community addition.
+
+* The [aptinio](https://github.com/gvaughn/elixir_gilded_rose/tree/aptinio) is our 2nd community edition.
 
 * If you'd like to submit a PR with your own solution, I'll give you a
   branch too!
