@@ -16,7 +16,7 @@ the new conjured item type you are expected to add.
 
 ## Changes from the original
 
-This Elixir version follows the original code very closely (and in pained me to write it), but has the
+This Elixir version follows the original code very closely (and it pained me to write it), but has the
 following changes:
 
 * The original had no tests.  Since this is a refactoring kata, I felt
