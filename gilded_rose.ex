@@ -16,44 +16,31 @@ defmodule GildedRose do
   end
 
   def update_item( item = %Item{ name: "Aged Brie" } ) do
-    if item.quality < 50 do
-      item = %{item | quality: item.quality + 1}
-      if item.name == "Backstage passes to a TAFKAL80ETC concert" do
-        if item.sell_in < 11 do
-          if item.quality < 50 do
-            item = %{item | quality: item.quality + 1}
-          end
-        end
-        if item.sell_in < 6 do
-          if item.quality < 50 do
-            item = %{item | quality: item.quality + 1}
-          end
-        end
+    item = %{item | quality: item.quality + 1}
+    if item.name == "Backstage passes to a TAFKAL80ETC concert" do
+      if item.sell_in < 11 do
+        item = %{item | quality: item.quality + 1}
+      end
+      if item.sell_in < 6 do
+        item = %{item | quality: item.quality + 1}
       end
     end
     item = age_item(item)
     if item.sell_in < 0 do
-      if item.quality < 50 do
-        item = %{item | quality: item.quality + 1}
-      end
+      item = %{item | quality: item.quality + 1}
     end
     item
+    |> enforce_quality_constraints
   end
 
   def update_item( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ) do
-    if item.quality < 50 do
-      item = %{item | quality: item.quality + 1}
-      if item.name == "Backstage passes to a TAFKAL80ETC concert" do
-        if item.sell_in < 11 do
-          if item.quality < 50 do
-            item = %{item | quality: item.quality + 1}
-          end
-        end
-        if item.sell_in < 6 do
-          if item.quality < 50 do
-            item = %{item | quality: item.quality + 1}
-          end
-        end
+    item = %{item | quality: item.quality + 1}
+    if item.name == "Backstage passes to a TAFKAL80ETC concert" do
+      if item.sell_in < 11 do
+        item = %{item | quality: item.quality + 1}
+      end
+      if item.sell_in < 6 do
+        item = %{item | quality: item.quality + 1}
       end
     end
     item = age_item(item)
@@ -61,22 +48,30 @@ defmodule GildedRose do
       item = %{item | quality: item.quality - item.quality}
     end
     item
+    |> enforce_quality_constraints
   end
 
   def update_item(item) do
-    if item.quality > 0 do
-      item = %{item | quality: item.quality - 1}
-    end
+    item = %{item | quality: item.quality - 1}
     item = age_item(item)
     if item.sell_in < 0 do
-      if item.quality > 0 do
-        item = %{item | quality: item.quality - 1}
-      end
+      item = %{item | quality: item.quality - 1}
     end
     item
+    |> enforce_quality_constraints
   end
 
   def age_item( item = %Item{ sell_in: sell_in } ) do
     %{item | sell_in: item.sell_in - 1}
+  end
+
+  def enforce_quality_constraints(item = %Item{ quality: quality } ) when quality > 50 do
+    %{ item | quality: 50 }
+  end
+  def enforce_quality_constraints(item = %Item{ quality: quality } ) when quality < 0 do
+    %{ item | quality: 0 }
+  end
+  def enforce_quality_constraints(item = %Item{} ) do
+    item
   end
 end
