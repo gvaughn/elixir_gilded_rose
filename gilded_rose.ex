@@ -7,9 +7,9 @@ defmodule GildedRose do
 
   defp update_item(item) do
     item
-    |> modify_item_quality_before_aging
+    |> update_quality_before_aging
     |> age_item
-    |> modify_item_quality_after_aging
+    |> update_quality_after_aging
     |> enforce_quality_constraints
   end
 
@@ -22,7 +22,7 @@ defmodule GildedRose do
   defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ),                                     do: 1
   defp quality_modifier( item = %Item{} ),                                                                                        do: -1
 
-  defp modify_item_quality_before_aging( item = %Item{} ) do
+  defp update_quality_before_aging( item = %Item{} ) do
     item = %{item | quality: item.quality + quality_modifier(item) }
   end
 
@@ -33,10 +33,10 @@ defmodule GildedRose do
     %{item | sell_in: item.sell_in - 1}
   end
 
-  defp modify_item_quality_after_aging( item = %Item{ sell_in: sell_in } ) when sell_in < 0 do
+  defp update_quality_after_aging( item = %Item{ sell_in: sell_in } ) when sell_in < 0 do
     %{item | quality: item.quality + quality_modifier(item) }
   end
-  defp modify_item_quality_after_aging( item = %Item{} ) do
+  defp update_quality_after_aging( item = %Item{} ) do
     item
   end
 
