@@ -138,35 +138,35 @@ defmodule GildedRoseTest do
     assert item.quality == 0
   end
 
-  test "conjured item before sell date" do
-    item = age("Conjured Mana Cake", 5, 10)
-    assert item.quality == 8
-  end
-
-  test "conjured item before sell date at zero quality" do
-    item = age("Conjured Mana Cake", 5, 0)
-    assert item.quality == 0
-  end
-
-  test "conjured item on sell date" do
-    item = age("Conjured Mana Cake", 0, 10)
-    assert item.quality == 6
-  end
-
-  test "conjured item on sell date at zero quality" do
-    item = age("Conjured Mana Cake", 0, 0)
-    assert item.quality == 0
-  end
-
-  test "conjured item after sell date" do
-    item = age("Conjured Mana Cake", -10, 10)
-    assert item.quality == 6
-  end
-
-  test "conjured item after sell date at zero quality" do
-    item = age("Conjured Mana Cake", -10, 0)
-    assert item.quality == 0
-  end
+  # test "conjured item before sell date" do
+  #   item = age("Conjured Mana Cake", 5, 10)
+  #   assert item.quality == 8
+  # end
+  #
+  # test "conjured item before sell date at zero quality" do
+  #   item = age("Conjured Mana Cake", 5, 0)
+  #   assert item.quality == 0
+  # end
+  #
+  # test "conjured item on sell date" do
+  #   item = age("Conjured Mana Cake", 0, 10)
+  #   assert item.quality == 6
+  # end
+  #
+  # test "conjured item on sell date at zero quality" do
+  #   item = age("Conjured Mana Cake", 0, 0)
+  #   assert item.quality == 0
+  # end
+  #
+  # test "conjured item after sell date" do
+  #   item = age("Conjured Mana Cake", -10, 10)
+  #   assert item.quality == 6
+  # end
+  #
+  # test "conjured item after sell date at zero quality" do
+  #   item = age("Conjured Mana Cake", -10, 0)
+  #   assert item.quality == 0
+  # end
 
   test "with multiple items" do
     [normal, brie] = update_quality([
