@@ -23,6 +23,7 @@ defmodule GildedRose do
   defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in <  6, do: 3
   defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in < 11, do: 2
   defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ),                                     do: 1
+  defp quality_modifier( item = %Item{ name: "Conjured Mana Cake" } ),                                                            do: -2
   defp quality_modifier( item = %Item{} ),                                                                                        do: -1
 
   defp age_item( item = %Item{ name: "Sulfuras, Hand of Ragnaros" } ) do
