@@ -40,36 +40,37 @@ defmodule GildedRose do
     item
   end
 
-  def update_item(item) do
-    if item.name != "Backstage passes to a TAFKAL80ETC concert" do
-      if item.quality > 0 do
-        item = %{item | quality: item.quality - 1}
-      end
-    else
-      if item.quality < 50 do
-        item = %{item | quality: item.quality + 1}
-        if item.name == "Backstage passes to a TAFKAL80ETC concert" do
-          if item.sell_in < 11 do
-            if item.quality < 50 do
-              item = %{item | quality: item.quality + 1}
-            end
+  def update_item( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ) do
+    if item.quality < 50 do
+      item = %{item | quality: item.quality + 1}
+      if item.name == "Backstage passes to a TAFKAL80ETC concert" do
+        if item.sell_in < 11 do
+          if item.quality < 50 do
+            item = %{item | quality: item.quality + 1}
           end
-          if item.sell_in < 6 do
-            if item.quality < 50 do
-              item = %{item | quality: item.quality + 1}
-            end
+        end
+        if item.sell_in < 6 do
+          if item.quality < 50 do
+            item = %{item | quality: item.quality + 1}
           end
         end
       end
     end
     item = %{item | sell_in: item.sell_in - 1}
     if item.sell_in < 0 do
-      if item.name != "Backstage passes to a TAFKAL80ETC concert" do
-        if item.quality > 0 do
-          item = %{item | quality: item.quality - 1}
-        end
-      else
-        item = %{item | quality: item.quality - item.quality}
+      item = %{item | quality: item.quality - item.quality}
+    end
+    item
+  end
+
+  def update_item(item) do
+    if item.quality > 0 do
+      item = %{item | quality: item.quality - 1}
+    end
+    item = %{item | sell_in: item.sell_in - 1}
+    if item.sell_in < 0 do
+      if item.quality > 0 do
+        item = %{item | quality: item.quality - 1}
       end
     end
     item
