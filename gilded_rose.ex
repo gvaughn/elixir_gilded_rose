@@ -17,10 +17,6 @@ defmodule GildedRose do
 
   def update_item( item = %Item{ name: "Aged Brie" } ) do
     item = %{item | quality: item.quality + 1}
-    if item.name == "Backstage passes to a TAFKAL80ETC concert" do
-      if item.sell_in < 11, do: item = %{item | quality: item.quality + 1}
-      if item.sell_in <  6, do: item = %{item | quality: item.quality + 1}
-    end
     item = age_item(item)
     if item.sell_in < 0, do: item = %{item | quality: item.quality + 1}
 
@@ -30,10 +26,8 @@ defmodule GildedRose do
 
   def update_item( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ) do
     item = %{item | quality: item.quality + 1}
-    if item.name == "Backstage passes to a TAFKAL80ETC concert" do
-      if item.sell_in < 11, do: item = %{item | quality: item.quality + 1}
-      if item.sell_in <  6, do: item = %{item | quality: item.quality + 1}
-    end
+    if item.sell_in < 11, do: item = %{item | quality: item.quality + 1}
+    if item.sell_in <  6, do: item = %{item | quality: item.quality + 1}
     item = age_item(item)
     if item.sell_in < 0, do: item = %{item | quality: item.quality - item.quality}
 
