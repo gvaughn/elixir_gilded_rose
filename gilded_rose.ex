@@ -29,6 +29,7 @@ defmodule GildedRose do
     if item.sell_in < 0 do
       item = %{item | quality: item.quality + 1}
     end
+
     item
     |> enforce_quality_constraints
   end
@@ -47,6 +48,7 @@ defmodule GildedRose do
     if item.sell_in < 0 do
       item = %{item | quality: item.quality - item.quality}
     end
+
     item
     |> enforce_quality_constraints
   end
@@ -57,6 +59,7 @@ defmodule GildedRose do
     if item.sell_in < 0 do
       item = %{item | quality: item.quality - 1}
     end
+
     item
     |> enforce_quality_constraints
   end
