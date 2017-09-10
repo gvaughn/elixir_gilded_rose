@@ -18,7 +18,6 @@ defmodule GildedRose do
   end
 
   defp quality_modifier( item = %Item{ name: "Sulfuras, Hand of Ragnaros" } ),                                                    do: 0
-  defp quality_modifier( item = %Item{ name: "Aged Brie", sell_in: sell_in } ) when sell_in < 0,                                  do: 1
   defp quality_modifier( item = %Item{ name: "Aged Brie" } ),                                                                     do: 1
   defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in <  0, do: -item.quality
   defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in <  6, do: 3
