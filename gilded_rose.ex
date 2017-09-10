@@ -31,7 +31,7 @@ defmodule GildedRose do
         end
       end
     end
-    item = %{item | sell_in: item.sell_in - 1}
+    item = age_item(item)
     if item.sell_in < 0 do
       if item.quality < 50 do
         item = %{item | quality: item.quality + 1}
@@ -56,7 +56,7 @@ defmodule GildedRose do
         end
       end
     end
-    item = %{item | sell_in: item.sell_in - 1}
+    item = age_item(item)
     if item.sell_in < 0 do
       item = %{item | quality: item.quality - item.quality}
     end
@@ -67,12 +67,16 @@ defmodule GildedRose do
     if item.quality > 0 do
       item = %{item | quality: item.quality - 1}
     end
-    item = %{item | sell_in: item.sell_in - 1}
+    item = age_item(item)
     if item.sell_in < 0 do
       if item.quality > 0 do
         item = %{item | quality: item.quality - 1}
       end
     end
     item
+  end
+
+  def age_item( item = %Item{ sell_in: sell_in } ) do
+    %{item | sell_in: item.sell_in - 1}
   end
 end
