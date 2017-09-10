@@ -11,11 +11,11 @@ defmodule GildedRose do
     Enum.map( items, &(update_item(&1) ) )
   end
 
-  def update_item( item = %Item{ name: "Sulfuras, Hand of Ragnaros" } ) do
+  defp update_item( item = %Item{ name: "Sulfuras, Hand of Ragnaros" } ) do
     item
   end
 
-  def update_item( item = %Item{ name: "Aged Brie" } ) do
+  defp update_item( item = %Item{ name: "Aged Brie" } ) do
     item = %{item | quality: item.quality + quality_modifier(item) }
     item = age_item(item)
     if item.sell_in < 0, do: item = %{item | quality: item.quality + 1}
@@ -23,10 +23,10 @@ defmodule GildedRose do
     item
     |> enforce_quality_constraints
   end
-  def quality_modifier( item = %Item{ name: "Aged Brie", sell_in: sell_in } ) when sell_in < 0, do: 1
-  def quality_modifier( item = %Item{ name: "Aged Brie" } ),                                    do: 1
+  defp quality_modifier( item = %Item{ name: "Aged Brie", sell_in: sell_in } ) when sell_in < 0, do: 1
+  defp quality_modifier( item = %Item{ name: "Aged Brie" } ),                                    do: 1
 
-  def update_item( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ) do
+  defp update_item( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ) do
     item = %{item | quality: item.quality + quality_modifier(item) }
     item = age_item(item)
     if item.sell_in < 0, do: item = %{item | quality: item.quality - item.quality}
@@ -34,11 +34,11 @@ defmodule GildedRose do
     item
     |> enforce_quality_constraints
   end
-  def quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in <  6, do: 3
-  def quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in < 11, do: 2
-  def quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ),                                     do: 1
+  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in <  6, do: 3
+  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in < 11, do: 2
+  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ),                                     do: 1
 
-  def update_item(item) do
+  defp update_item(item) do
     item = %{item | quality: item.quality + quality_modifier(item) }
     item = age_item(item)
     if item.sell_in < 0, do: item = %{item | quality: item.quality - 1}
@@ -46,13 +46,13 @@ defmodule GildedRose do
     item
     |> enforce_quality_constraints
   end
-  def quality_modifier( item = %Item{} ), do: -1
+  defp quality_modifier( item = %Item{} ), do: -1
 
-  def age_item( item = %Item{ sell_in: sell_in } ) do
+  defp age_item( item = %Item{ sell_in: sell_in } ) do
     %{item | sell_in: item.sell_in - 1}
   end
 
-  def enforce_quality_constraints(item = %Item{ quality: quality } ) when quality > 50, do: %{ item | quality: 50 }
-  def enforce_quality_constraints(item = %Item{ quality: quality } ) when quality <  0, do: %{ item | quality: 0 }
-  def enforce_quality_constraints(item = %Item{} ),                                     do: item
+  defp enforce_quality_constraints(item = %Item{ quality: quality } ) when quality > 50, do: %{ item | quality: 50 }
+  defp enforce_quality_constraints(item = %Item{ quality: quality } ) when quality <  0, do: %{ item | quality: 0 }
+  defp enforce_quality_constraints(item = %Item{} ),                                     do: item
 end
