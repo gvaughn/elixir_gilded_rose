@@ -8,30 +8,6 @@ defmodule GildedRose do
   defp update_item( item = %Item{ name: "Sulfuras, Hand of Ragnaros" } ) do
     item
   end
-
-  defp update_item( item = %Item{ name: "Aged Brie" } ) do
-    item = %{item | quality: item.quality + quality_modifier(item) }
-    item = age_item(item)
-    if item.sell_in < 0, do: item = %{item | quality: item.quality + 1}
-
-    item
-    |> enforce_quality_constraints
-  end
-  defp quality_modifier( item = %Item{ name: "Aged Brie", sell_in: sell_in } ) when sell_in < 0, do: 1
-  defp quality_modifier( item = %Item{ name: "Aged Brie" } ),                                    do: 1
-
-  defp update_item( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ) do
-    item = %{item | quality: item.quality + quality_modifier(item) }
-    item = age_item(item)
-    if item.sell_in < 0, do: item = %{item | quality: item.quality - item.quality}
-
-    item
-    |> enforce_quality_constraints
-  end
-  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in <  6, do: 3
-  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in < 11, do: 2
-  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ),                                     do: 1
-
   defp update_item(item) do
     item
     |> modify_item_quality_before_aging
@@ -39,7 +15,14 @@ defmodule GildedRose do
     |> modify_item_quality_after_aging
     |> enforce_quality_constraints
   end
-  defp quality_modifier( item = %Item{} ), do: -1
+
+  defp quality_modifier( item = %Item{ name: "Aged Brie", sell_in: sell_in } ) when sell_in < 0,                                  do: 1
+  defp quality_modifier( item = %Item{ name: "Aged Brie" } ),                                                                     do: 1
+  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in <  0, do: -item.quality
+  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in <  6, do: 3
+  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in } ) when sell_in < 11, do: 2
+  defp quality_modifier( item = %Item{ name: "Backstage passes to a TAFKAL80ETC concert" } ),                                     do: 1
+  defp quality_modifier( item = %Item{} ),                                                                                        do: -1
 
   defp modify_item_quality_before_aging( item = %Item{} ) do
     item = %{item | quality: item.quality + quality_modifier(item) }
