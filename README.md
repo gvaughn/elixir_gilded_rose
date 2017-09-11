@@ -37,11 +37,13 @@ You can read
 
 * The [gvaughn](https://github.com/gvaughn/elixir_gilded_rose/tree/gvaughn) branch is my first solution for this kata.
 
-* The [gvaughn2](https://github.com/gvaughn/elixir_gilded_rose/tree/gvaughn2) is my 2nd attempt, which I like better.
+* The [gvaughn2](https://github.com/gvaughn/elixir_gilded_rose/tree/gvaughn2) branch is my 2nd attempt, which I like better.
 
 * The [eksperimental](https://github.com/gvaughn/elixir_gilded_rose/tree/eksperimental) branch is our first community addition.
 
-* The [aptinio](https://github.com/gvaughn/elixir_gilded_rose/tree/aptinio) is our 2nd community edition.
+* The [aptinio](https://github.com/gvaughn/elixir_gilded_rose/tree/aptinio) branch is our 2nd community edition.
+
+* The [geeksam](https://github.com/gvaughn/elixir_gilded_rose/tree/geeksam) branch has great step-by-step refactoring commits to study.
 
 * If you'd like to submit a PR with your own solution, I'll give you a
   branch too!
